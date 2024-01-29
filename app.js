@@ -1,9 +1,11 @@
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const csv = require('csv-parser');
+const fs = require('fs');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -22,20 +24,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+// Middleware to handle CSV data
+const csvData = [];
+fs.createReadStream('./public/points.csv')
+  .pipe(csv())
+  .on('data', (row) => {
+    csvData.push(row);
+  })
+  .on('end', () => {
+    console.log('CSV file successfully processed');
+  });
+
+// Endpoint to serve sorted CSV data
+app.get('/api/data', (req, res) => {
+  // Sort the CSV data before sending it
+  const sortedData = csvData.sort((a, b) => b['r'] - a['r']);
+  res.json(sortedData);
+});
+
+
+// Existing middleware and route setup
+app.use('/users', usersRouter);
+
+// 404 error handler
+app.use((req, res, next) => {
   next(createError(404));
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+// Global error handler
+app.use((err, req, res, next) => {
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env');// === 'development' ? err : {}
-
-  // render the error page
+  res.locals.error = req.app.get('env');
   res.status(err.status || 500);
   res.render('error');
 });
 
+// Export the app
 module.exports = app;
