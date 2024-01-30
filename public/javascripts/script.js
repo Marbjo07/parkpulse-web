@@ -68,15 +68,17 @@ function next() {
 }
 
 function updateImage() {
-    const x = 144171 + parseInt(csvData[currentIndex].x) / 16;
-    const y = 77057 + parseInt(csvData[currentIndex].y) / 16;
+    const stride = 16; // Model was ran using this stride. Check the parkpulse-ai repo for more details. (predict_on_map.py)
+
+    const x = 144171 + parseInt(csvData[currentIndex].x) / stride;
+    const y = 77057 + parseInt(csvData[currentIndex].y) / stride;
+    const z = 18; // Model was ran using this zoom level. Check the parkpulse-ai repo for more details. (get_images.py)
 
     const {'sw': south_west, 'ne': nord_east} = getTileBounds({'x':x, 'y':y, 'z':18});
 
     const latitude = (south_west.lat + nord_east.lat) / 2; 
     const longitude = (south_west.lng + nord_east.lng) / 2;
-
-    
-    document.getElementById("google-maps-link").href = `https://www.google.com/maps/place/59%C2%B019'01.8%22N+18%C2%B000'39.8%22E/@${latitude},${longitude},291m/data=!3m1!1e3!4m4!3m3!8m2!3d59.3171667!4d18.0110556?entry=ttu`;
-    document.getElementById("image").src = `https://khms3.google.com/kh/v=967?x=${parseInt(x)}&y=${parseInt(y)}&z=18`;
+   
+    document.getElementById("google-maps-link").href = `https://www.google.com/maps/place/${latitude},${longitude}/@${latitude},${longitude},122m/data=!3m1!1e3!4m4!3m3!8m2!3d${latitude}!4d${longitude}?entry=ttu`;
+    document.getElementById("image").src = `https://khms3.google.com/kh/v=967?x=${parseInt(x / 2)}&y=${parseInt(y / 2)}&z=${z - 1}`;
 }
