@@ -38,6 +38,7 @@
         currentIndex = 0;
       }
       document.getElementById("temp").innerHTML = Object.values(csvData[currentIndex]);
+      updateImage();
     }
 
     function next() {
@@ -47,7 +48,17 @@
         currentIndex = csvData.length - 1;
       }
       document.getElementById("temp").innerHTML = Object.values(csvData[currentIndex]);
-      
+      updateImage();
+    }
+
+    function updateImage() {
+      let x = parseInt(parseInt(csvData[currentIndex]['x']) / 16);
+      console.log(x);
+
+      let y = parseInt(parseInt(csvData[currentIndex]['y']) / 16);
+      console.log(y);
+
+      document.getElementById("image").src = `https://khms3.google.com/kh/v=967?x=${144171 + x}&y=${77057 + y}&z=18`
     }
 
   </script>
