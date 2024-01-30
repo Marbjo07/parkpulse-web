@@ -1,67 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ParkPulse</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
-  
-  
-  <script>
-    let currentIndex = 0;
-    let csvData = [];
-  
-    // Function to fetch data from the server
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/data'); // replace '/api/data' with your actual server endpoint
-        const data = await response.json();
-  
-        // Assuming the response is an array of objects, like your CSV data
-        csvData = data;
-  
-        // Now you can use csvData as needed
-        console.log(csvData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-  
-    // Call the fetchData function to get data when needed
-    fetchData();
-    
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ParkPulse</title>
+	<link rel="stylesheet" href="/stylesheets/style.css">
 
-    function prev() {
-      currentIndex -= 1;
-      if (currentIndex < 0) {
-        console.warn("index out of range");
-        currentIndex = 0;
-      }
-      document.getElementById("temp").innerHTML = Object.values(csvData[currentIndex]);
-      updateImage();
-    }
 
-    function next() {
-      currentIndex += 1;
-      if (currentIndex >= csvData.length) {
-        console.warn("index out of range");
-        currentIndex = csvData.length - 1;
-      }
-      document.getElementById("temp").innerHTML = Object.values(csvData[currentIndex]);
-      updateImage();
-    }
-
-    function updateImage() {
-      let x = parseInt(parseInt(csvData[currentIndex]['x']) / 16);
-      console.log(x);
-
-      let y = parseInt(parseInt(csvData[currentIndex]['y']) / 16);
-      console.log(y);
-
-      document.getElementById("image").src = `https://khms3.google.com/kh/v=967?x=${144171 + x}&y=${77057 + y}&z=18`
-    }
-
-  </script>
+	<script src="/javascripts/script.js">
+	</script>
 
 
 </head>
@@ -73,12 +20,13 @@
       <img id="image" src="https://khms3.google.com/kh/v=967?x=144171&y=77057&z=18" >
     </div>
 
-    <p id="temp">Temp</p>
-    
+	<a href="https://www.google.com/" target="_blank" id="google-maps-link">Take Me To Google Maps</a>
+
     <div id="buttons">
       <button onclick=prev()>Previous</button>
       <button onclick=next()>Next</button>
     </div>
+
   </div>
 
 </body>
